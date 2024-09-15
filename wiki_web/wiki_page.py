@@ -1,12 +1,34 @@
 import re
 import requests
 import logging
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, element
 
 URL_NAME_REGEX = r'\/([^\/]+)$'
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+def remove_elements(soup: BeautifulSoup, tag:str, class_name:str = None):
+  ### Remove elements based on tag and class (optional)
+  for e in soup.find_all(tag, class_ = class_name):
+    e.decompose()
+
+def is_in_parenthesis(sub_element: element.Tag, element:element.Tag):
+  ### Check if sub_element is surrounded by parenthesis in elementn text
+  parenthesis_regex = fr'\([^\)]*{sub_element}[^\)]*\)'
+  return re.search(parenthesis_regex, str(element)) is not None
+
+def is_valid_link(element: element.Tag):
+  ### Checks if the link is valid per the getting to philosphy rules
+  classes = element.get("class", [])
+  href = element.get("href")
+
+  # Internal links don't have a class or are mw-redirect
+  if href.startswith("#cite"):
+    return False
+  if len(classes) == 0 or "mw-redirect" in classes:
+    return True
+  return False
 
 class wikiPage():
   def __init__(self, url: str):
@@ -36,13 +58,13 @@ class wikiPage():
     
     # Remove various elements
     objs_to_remove = [
-      {"tag": "table", "class": "infobox"},
-      {"tag": "table", "class": "sidebar"},
-      {"tag": "div", "class": "navbar"},
+      {"tag": "i"},
+      {"tag": "div", "class_name": "navbar"},
+      {"tag": "table", "class_name": "infobox"},
+      {"tag": "table", "class_name": "sidebar"},
     ]
     for obj in objs_to_remove:
-      for e in soup.find_all(obj["tag"], class_=obj["class"]):
-        e.decompose()
+      remove_elements(soup, **obj)
 
     # Get the main page
     main_page = (
@@ -53,29 +75,11 @@ class wikiPage():
 
     first_link = None
     for p in main_page:
-      # Remove italized text
-      for e in p.find_all("i"):
-        _ = e.decompose()
-
-      # Get links in order
+      # Check links in order
       for a in p.find_all("a", href=True):
-        a_class = a.get("class")
-        a_href = a.get("href")
-
-        # Internal links don't have a class or are mw-redirect
-        if not a_class or "mw-redirect" in a_class:
-          # Check if citation
-          if a_href.startswith("#cite"):
-            continue
-          
-          # Check if parenthesized
-          parenthesis_regex = fr'\([^\)]*{a}[^\)]*\)'
-          if re.search(parenthesis_regex,str(p)):
-            continue
-
-          first_link = "https://en.wikipedia.org" + a_href
+        if is_valid_link(a) and not is_in_parenthesis(a, p):
+          first_link = "https://en.wikipedia.org" + a.get("href")
           return first_link
-    
     return "No valid link found."
       
   def get_first_link(self):
