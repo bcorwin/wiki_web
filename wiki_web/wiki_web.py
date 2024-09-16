@@ -1,5 +1,6 @@
 # TODO: Add logging
 # TODO: follow first link until it gets to philosophy, loops, or stops
+import os
 import csv
 import requests
 import logging
@@ -52,6 +53,9 @@ class wikiWeb:
 
     def load_web(self, file_name="wiki_web.tsv"):
         # Loads a previously saved web. Helpful for adding more samples
+        if not os.path.exists(file_name):
+            logger.warning(f"{file_name} does not exist and hasn't been loaded.")
+            return None
         logger.info(f"Loading {file_name}.")
         with open(file_name, "r") as file:
             reader = csv.reader(file, delimiter="\t")
