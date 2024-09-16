@@ -17,7 +17,7 @@ def remove_elements(soup: BeautifulSoup, tag: str, class_name: str = None):
 
 def is_in_parenthesis(sub_element: element.Tag, element: element.Tag):
     # Check if sub_element is surrounded by parenthesis in elementn text
-    parenthesis_regex = rf"\([^\)]*{sub_element}[^\)]*\)"
+    parenthesis_regex = rf"\([^\)]*{re.escape(str(sub_element))}[^\)]*\)"
     return re.search(parenthesis_regex, str(element)) is not None
 
 
