@@ -14,10 +14,47 @@ def remove_elements(soup: BeautifulSoup, tag: str, class_name: str = None):
         e.decompose()
 
 
+def match_parentheses(text: str):
+    if not re.search(r"[\(\)]", text):
+        return text
+    bracket_stack = []
+    brackets_numbered = []
+    count = 0
+    for char in text:
+        if char == "(":
+            count += 1
+            bracket_stack.append(("(", count))
+            brackets_numbered.append(("(", count))
+        elif char == ")":
+            if len(bracket_stack) == 0:
+                raise Exception("Unmatched closed parentheses.")
+            else:
+                _, bracket_num = bracket_stack.pop()
+                brackets_numbered.append((")", bracket_num))
+    if len(bracket_stack):
+        raise Exception("Unmatched open parentheses.")
+
+    text_split = re.split(r"[\(\)]", text)
+    output = ""
+    for s in text_split:
+        if len(brackets_numbered):
+            bracket, num = brackets_numbered.pop(0)
+            output += s + f"{bracket}<{num}>"
+    return output
+
+
 def is_in_parenthesis(sub_element: element.Tag, element: element.Tag):
     # Check if sub_element is surrounded by parenthesis in elementn text
-    parenthesis_regex = rf"\([^\)]*{re.escape(str(sub_element))}[^\)]*\)"
-    return re.search(parenthesis_regex, str(element)) is not None
+    # parenthesis_regex = rf"\([^\)]*{re.escape(str(sub_element))}[^\)]*\)"
+    # html_search = re.search(parenthesis_regex, str(element)) is not None
+
+    # The above fails when there (something (like) this)
+    sub_text = match_parentheses(sub_element.get_text())
+    outer_text = match_parentheses(element.get_text())
+    matched_parenthesis_regex = rf"\(<(\d+)>.*{re.escape(sub_text)}.*\)<\1>"
+    text_search = re.search(matched_parenthesis_regex, outer_text) is not None
+
+    return text_search
 
 
 def is_valid_link(element: element.Tag):
@@ -55,7 +92,6 @@ class wikiPage:
         return not (self == other)
 
     def _get_first_link(self, html_content):
-        # TODO: break this into helper functions and test them
         elements_to_check = ["p", "ol", "ul"]
         soup = BeautifulSoup(html_content, "html.parser")
 
@@ -65,6 +101,8 @@ class wikiPage:
             {"tag": "div", "class_name": "navbar"},
             {"tag": "table", "class_name": "infobox"},
             {"tag": "table", "class_name": "sidebar"},
+            {"tag": "a", "class_name": "oo-ui-buttonElement-button"},
+            {"tag": "sup", "class_name": "ext-phonos-attribution"},
         ]
         for obj in objs_to_remove:
             remove_elements(soup, **obj)

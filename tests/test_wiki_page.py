@@ -24,6 +24,26 @@ def test_remove_elements(tag: str, class_name: str, expected: str):
 
 
 @pytest.mark.parametrize(
+    "input,expected",
+    {
+        ("test", "test"),
+        ("(this is a (test))", "(<1>this is a (<2>test)<2>)<1>"),
+        ("(this) is a (test)", "(<1>this)<1> is a (<2>test)<2>"),
+        ("((test) this is a test)", "(<1>(<2>test)<2> this is a test)<1>"),
+        ("(this is a (test)", Exception("Unmatched open parentheses.")),
+        ("(this) is a (test))", Exception("Unmatched closed parentheses.")),
+    },
+)
+def test_match_parentheses(input, expected):
+    if isinstance(expected, str):
+        assert wp.match_parentheses(input) == expected
+    else:
+        with pytest.raises(Exception) as e_info:
+            wp.match_parentheses(input)
+        assert str(e_info.value) == str(expected)
+
+
+@pytest.mark.parametrize(
     "inner_text,outer_text,expected",
     {
         (
@@ -37,6 +57,7 @@ def test_remove_elements(tag: str, class_name: str, expected: str):
             True,
         ),
         ("<i>no</i>", "In parenthesis? (<b>yes</b>) <i>no</i>", False),
+        ("<i>yes</i>", "In parenthesis? ((<b>yes</b>) <i>yes</i>)", True),
     },
 )
 def test_is_in_parenthesis(inner_text, outer_text, expected):
@@ -68,6 +89,7 @@ def test_is_valid_link(text, expected):
         ("Oslofjord", "Norway"),
         ("Philosophy", "Existence"),
         ("Surrey", "Non-metropolitan_county"),
+        ("Mayotte", "Overseas_France"),
     },
 )
 def test_wiki_page(input, expected):
