@@ -21,6 +21,7 @@ class wikiWeb:
     def __init__(self):
         logger.info("Wiki Web initialized.")
         self.first_links = {}
+        self.seeds = []
 
     def _add_page(self, page: wikiPage):
         first_link = wikiPage(page.get_first_link())
@@ -43,6 +44,7 @@ class wikiWeb:
         for _ in range(n):
             seed = wikiPage(url=random_wiki_page())
             self.first_links[seed] = None
+            self.seeds.append(seed)
 
     def build_web(self):
         logger.info("Building the web.")
@@ -51,7 +53,7 @@ class wikiWeb:
             logger.info(f"Clicking through {seed}")
             self._add_page(seed)
 
-    def load_web(self, file_name="wiki_web.tsv"):
+    def load_web(self, file_name="outputs/wiki_web.tsv"):
         # Loads a previously saved web. Helpful for adding more samples
         if not os.path.exists(file_name):
             logger.warning(f"{file_name} does not exist and hasn't been loaded.")
@@ -65,10 +67,19 @@ class wikiWeb:
                 n += 1
             logger.info(f"{n} urls added")
 
-    def save_web(self, file_name="wiki_web.tsv"):
+    def save_web(self, file_name="outputs/wiki_web.tsv"):
         # Save the web as a tab-delimited file
         logger.info("Saving results.")
         with open(file_name, "w", newline="") as file:
             writer = csv.writer(file, delimiter="\t")
             for key, value in self.first_links.items():
                 writer.writerow([key, value])
+        self.save_seeds()
+
+    def save_seeds(self, file_name="outputs/seeds.txt"):
+        # Save the seeds as a text file
+        logger.info("Saving seeds.")
+        with open(file_name, "a", newline="") as file:
+            writer = csv.writer(file)
+            for seed in self.seeds:
+                writer.writerow([seed])
