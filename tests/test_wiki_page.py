@@ -59,3 +59,21 @@ def test_is_in_parenthesis(inner_text, outer_text, expected):
 def test_is_valid_link(text, expected):
     element = BeautifulSoup(text, "html.parser").find("a")
     assert wp.is_valid_link(element) is expected
+
+
+@pytest.mark.e2e
+@pytest.mark.parametrize(
+    "input,expected",
+    {
+        ("Oslofjord", "Norway"),
+        ("Philosophy", "Existence"),
+        ("Surrey", "Non-metropolitan_county"),
+    },
+)
+def test_wiki_page(input, expected):
+    # If these tests fail, check to see if the pages has changed
+    input = "https://en.wikipedia.org/wiki/" + input
+    expected = "https://en.wikipedia.org/wiki/" + expected
+
+    wiki_page = wp.wikiPage(input)
+    assert wiki_page.get_first_link() == expected
