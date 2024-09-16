@@ -5,8 +5,7 @@ from bs4 import BeautifulSoup, element
 
 URL_NAME_REGEX = r"\/([^\/]+)$"
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = logging.getLogger("__main__." + __name__)
 
 
 def remove_elements(soup: BeautifulSoup, tag: str, class_name: str = None):

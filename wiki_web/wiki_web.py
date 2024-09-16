@@ -8,7 +8,7 @@ from wiki_page import wikiPage
 
 RANDOM_URL = "https://en.wikipedia.org/wiki/Special:Random"
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("__main__." + __name__)
 
 
 def random_wiki_page():
