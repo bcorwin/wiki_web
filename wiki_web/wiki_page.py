@@ -100,6 +100,7 @@ class wikiPage:
         objs_to_remove = [
             {"tag": "i"},
             {"tag": "div", "class_name": "navbar"},
+            {"tag": "div", "class_name": "hidden-content"},
             {"tag": "table", "class_name": "infobox"},
             {"tag": "table", "class_name": "sidebar"},
             {"tag": "a", "class_name": "oo-ui-buttonElement-button"},
