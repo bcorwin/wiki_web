@@ -32,7 +32,7 @@ class wikiWeb:
         elif first_link not in self.first_links:
             self._add_page(first_link)
         else:
-            logger.info(f"Stopping at {first_link}")
+            logger.debug(f"Stopping at {first_link}")
 
     def add_urls(self, urls: list | str):
         if isinstance(urls, str):
@@ -53,9 +53,11 @@ class wikiWeb:
     def build_web(self):
         logger.info("Building the web.")
         seeds = [key for key, item in self.first_links.items() if item is None]
+        n = 1
         for seed in seeds:
-            logger.info(f"Clicking through {seed}")
+            logger.info(f"[{n:3}] Clicking through {seed}")
             self._add_page(seed)
+            n += 1
 
     def load_web(self, file_name="outputs/wiki_web.tsv"):
         # Loads a previously saved web. Helpful for adding more samples

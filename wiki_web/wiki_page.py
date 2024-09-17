@@ -126,14 +126,14 @@ class wikiPage:
         if not self._first_link:
             res = requests.get(self.url)
             if res.status_code != 200:
-                logger.error(res.reason)
+                logger.warning(res.reason)
                 first_link = "ERROR: " + res.reason
             else:
                 logger.debug(res.url)
                 try:
                     first_link = self._get_first_link(res.content)
                 except Exception as e:
-                    logger.error(str(e))
+                    logger.warning(str(e))
                     first_link = "ERROR: " + str(e)
 
             self._first_link = first_link

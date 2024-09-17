@@ -33,7 +33,13 @@ logger.addHandler(fh)
 @click.option(
     "--save-file-name", default="outputs/wiki_web.tsv", help="File to save to."
 )
-def main(seeds, load, load_file_name, save_file_name):
+@click.option(
+    "-l", "--log-level", default=2, help="Console logging level: 1 (more) - 5 (less)"
+)
+def main(seeds, load, load_file_name, save_file_name, log_level):
+    log_level = max(min(log_level, 5), 1)
+    ch.setLevel(10 * log_level)
+
     ww = wikiWeb()
     if load:
         ww.load_web(file_name=load_file_name)
