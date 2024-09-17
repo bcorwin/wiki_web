@@ -69,7 +69,9 @@ class wikiWeb:
             reader = csv.reader(file, delimiter="\t")
             n = 0
             for row in reader:
-                self.first_links[row[0]] = row[1]
+                parent = wikiPage(url=row[0])
+                child = wikiPage(url=row[1])
+                self.first_links[parent] = child
                 n += 1
             logger.info(f"{n} urls added")
 

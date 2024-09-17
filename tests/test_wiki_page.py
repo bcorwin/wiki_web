@@ -90,8 +90,9 @@ def test_is_valid_link(text, expected):
         ("Philosophy", "Existence"),
         ("Surrey", "Non-metropolitan_county"),
         ("Mayotte", "Overseas_France"),
-        ("Compound_(linguistics)", "ERROR: Unmatched open parentheses."),
         ("Fatin_Abdel_Wahab", "Film_director"),
+        ("Compound_(linguistics)", "ERROR: Unmatched open parentheses."),
+        ("madeuppage", "ERROR: Not Found"),
     },
 )
 def test_wiki_page(input: str, expected: str):
