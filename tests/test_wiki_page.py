@@ -97,7 +97,9 @@ def test_is_valid_link(text, expected):
     },
 )
 def test_wiki_page(input: str, expected: str):
-    # If these tests fail, check to see if the pages has changed
+    # If these tests fail, check to see if the page has changed
+    # TODO: Re-direct calls to wikipedia to localhost and serve with
+    # my own version of the pages that I know have the issues I want to test
     input = "https://en.wikipedia.org/wiki/" + input
     if not expected.startswith("ERROR:"):
         expected = "https://en.wikipedia.org/wiki/" + expected

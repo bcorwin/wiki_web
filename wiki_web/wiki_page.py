@@ -15,6 +15,7 @@ def remove_elements(soup: BeautifulSoup, tag: str, class_name: str = None):
 
 
 def match_parentheses(text: str):
+    # Go through the text string and match each ( with its )
     if not re.search(r"[\(\)]", text):
         return text
     bracket_stack = []
@@ -97,6 +98,7 @@ class wikiPage:
         soup = BeautifulSoup(html_content, "html.parser")
 
         # Remove various elements
+        # Many of these appear before the first paragraph so need to be excluded
         objs_to_remove = [
             {"tag": "i"},
             {"tag": "div", "class_name": "navbar"},
