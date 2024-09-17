@@ -73,7 +73,8 @@ def is_valid_link(element: element.Tag):
 class wikiPage:
     def __init__(self, url: str):
         self.url = url
-        self.name = re.search(URL_NAME_REGEX, url).group(1)
+        name = re.search(URL_NAME_REGEX, url)
+        self.name = name.group(1) if name else url
         self._first_link = None
 
     def __str__(self):
@@ -117,17 +118,22 @@ class wikiPage:
                 if is_valid_link(a) and not is_in_parenthesis(a, p):
                     first_link = "https://en.wikipedia.org" + a.get("href")
                     return first_link
-        return "No valid link found."
+        raise Exception("No valid link found.")
 
     def get_first_link(self):
         # If I've already found this link, return it. Otherwise, find it.
         if not self._first_link:
             res = requests.get(self.url)
             if res.status_code != 200:
-                first_link = res.reason
+                logger.error(res.reason)
+                first_link = "ERROR: " + res.reason
             else:
                 logger.debug(res.url)
-                first_link = self._get_first_link(res.content)
+                try:
+                    first_link = self._get_first_link(res.content)
+                except Exception as e:
+                    logger.error(str(e))
+                    first_link = "ERROR: " + str(e)
 
             self._first_link = first_link
         return self._first_link

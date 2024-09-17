@@ -90,12 +90,15 @@ def test_is_valid_link(text, expected):
         ("Philosophy", "Existence"),
         ("Surrey", "Non-metropolitan_county"),
         ("Mayotte", "Overseas_France"),
+        ("Compound_(linguistics)", "ERROR: Unmatched open parentheses."),
+        ("Fatin_Abdel_Wahab", "Film_director"),
     },
 )
-def test_wiki_page(input, expected):
+def test_wiki_page(input: str, expected: str):
     # If these tests fail, check to see if the pages has changed
     input = "https://en.wikipedia.org/wiki/" + input
-    expected = "https://en.wikipedia.org/wiki/" + expected
+    if not expected.startswith("ERROR:"):
+        expected = "https://en.wikipedia.org/wiki/" + expected
 
     wiki_page = wp.wikiPage(input)
     assert wiki_page.get_first_link() == expected

@@ -24,9 +24,12 @@ class wikiWeb:
         self.seeds = []
 
     def _add_page(self, page: wikiPage):
-        first_link = wikiPage(page.get_first_link())
+        url = page.get_first_link()
+        first_link = wikiPage(url)
         self.first_links[page] = first_link
-        if first_link not in self.first_links:
+        if url.startswith("ERROR"):
+            pass
+        elif first_link not in self.first_links:
             self._add_page(first_link)
         else:
             logger.info(f"Stopping at {first_link}")
@@ -38,6 +41,7 @@ class wikiWeb:
         for url in urls:
             seed = wikiPage(url)
             self.first_links[seed] = None
+            self.seeds.append(seed)
 
     def add_seeds(self, n: int = 100):
         logger.info(f"Adding {n} seed(s).")
@@ -80,6 +84,6 @@ class wikiWeb:
         # Save the seeds as a text file
         logger.info("Saving seeds.")
         with open(file_name, "a", newline="") as file:
-            writer = csv.writer(file)
+            writer = csv.writer(file, delimiter="\t")
             for seed in self.seeds:
                 writer.writerow([seed])
