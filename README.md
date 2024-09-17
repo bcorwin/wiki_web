@@ -1,10 +1,3 @@
-# TODO:
-- fix bugs as they arise
-- scrape 599 or so seeds
-- basic analysis / results
-- readme
-- write blog post (hardest part was matching parenthesis)
-- in future, interactive web (new blog post?)
 # Wiki Web
 
 This repo is designed to scrape random wikipedia pages,
@@ -25,3 +18,15 @@ I wanted to pull my own data on this to analysis it.
   1. `debug.log` which will give you the debug logs for the run
   1. `seed.txt` a list of seed URLs
   1. `wiki_web.tsv` a tab-separated list of parent-child relationships for all the pages encountered
+
+## How it works
+1. Add random Wikipedia pages as seeds (or supply your own) (`wikiWeb.add_seeds()` or `wikiWeb.add_urls()`)
+1. This adds urls to `wikiWeb.seeds` (`list`) and `wikiWeb.first_links` (a `dict` with all items initialized to `None`)
+1. `wikiWeb.build_web()` iterates across all seeds
+  1. 
+
+## Initial analysis
+
+## Future plans
+- Create an interative display for the Wiki Web.
+- Fix any bugs as they arise
