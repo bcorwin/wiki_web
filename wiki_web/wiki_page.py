@@ -105,6 +105,7 @@ class wikiPage:
             {"tag": "table", "class_name": "sidebar"},
             {"tag": "a", "class_name": "oo-ui-buttonElement-button"},
             {"tag": "sup", "class_name": "ext-phonos-attribution"},
+            {"tag": "span", "class_name": "IPA"},
         ]
         for obj in objs_to_remove:
             remove_elements(soup, **obj)

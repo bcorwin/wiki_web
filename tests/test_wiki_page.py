@@ -91,6 +91,7 @@ def test_is_valid_link(text, expected):
         ("Surrey", "Non-metropolitan_county"),
         ("Mayotte", "Overseas_France"),
         ("Fatin_Abdel_Wahab", "Film_director"),
+        ("Teodorowo,_Radziejów_County", "Gmina_Piotrk%C3%B3w_Kujawski"),
         ("Compound_(linguistics)", "ERROR: Unmatched open parentheses."),
         ("madeuppage", "ERROR: Not Found"),
     },
