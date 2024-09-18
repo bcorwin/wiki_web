@@ -42,15 +42,11 @@ and enables the user to run the process in batches)
     1. Loops through all the `a` tags and finds the first link that is internal, not in italics, and not in parenthesis. 
 
 ## Initial analysis
-TODO: 
-- philosophy loop size
-- where enters the loop
-- average clicks to philosophy
-- percent that go to philo
-- average loop length
-- any other secondary ends?
-- percent errors
+
 
 ## Future plans
 - Create an interative display for the Wiki Web.
 - Fix any bugs as they arise
+- Look into other possible attractors
+- Average cycle lengths
+
