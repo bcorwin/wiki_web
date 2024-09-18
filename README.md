@@ -15,15 +15,31 @@ I wanted to pull my own data on this to analysis it.
 1. On the command line run `python wiki_web/main.py` to create one seed URL and see where it goes
 1. For more options run `python wiki_web/main.py --help`
 1. This will create three files:
-  1. `debug.log` which will give you the debug logs for the run
-  1. `seed.txt` a list of seed URLs
-  1. `wiki_web.tsv` a tab-separated list of parent-child relationships for all the pages encountered
+    - `debug.log` which will give you the debug logs for the run
+    - `seed.txt` a list of seed URLs
+    - `wiki_web.tsv` a tab-separated list of parent-child relationships for all the pages encountered
 
 ## How it works
-1. Add random Wikipedia pages as seeds (or supply your own) (`wikiWeb.add_seeds()` or `wikiWeb.add_urls()`)
-1. This adds urls to `wikiWeb.seeds` (`list`) and `wikiWeb.first_links` (a `dict` with all items initialized to `None`)
-1. `wikiWeb.build_web()` iterates across all seeds
-  1. 
+1. Initialize: `ww = wikiWeb()`
+1. (optional) `ww.load_web()` loads a previously run web
+(this speeds up searching since the algorithm stops once it finds a link that's already been proceessed
+and enables the user to run the process in batches)
+1. Add random Wikipedia pages as seeds (`ww.add_seeds()`) and/or or supply your own (`ww.add_urls()`), this adds urls to:
+    - `ww.seeds` a `list` of all seeds
+    - `ww.first_links` a `dict` that maps a Wikipedia page to it's first valid link (initialized to `None` for all seeds)
+1. `ww.build_web()` iterates across all seeds (i.e. links that have not yet been processed), for each seed it:
+    1. Finds the first valid link (see next step)
+    2. If that link is an error, break
+    3. If that link has already been procssed, break
+    4. Otherwise, find the first valid link of the new link
+1. Finding the first valid link:
+    1. Checks only a set
+       [list]([url](https://github.com/bcorwin/wiki_web/blob/3ba17a04678d99dfd5f364f19541e4b2109c78a9/wiki_web/wiki_page.py#L97))
+       of html elements (`p`, `ol` and `ul`)
+    1. Removes a [list]([url](https://github.com/bcorwin/wiki_web/blob/3ba17a04678d99dfd5f364f19541e4b2109c78a9/wiki_web/wiki_page.py#L102))
+        of `tag` / `class` combinations because they are things like navbars that appear, in code,
+        before the first paragraph so we don't want to process them
+    1. Loops through all the `a` tags and finds the first link that is internal, not in italics, and not in parenthesis. 
 
 ## Initial analysis
 
