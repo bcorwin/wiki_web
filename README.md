@@ -69,7 +69,7 @@ but I want to look more into them for the next analysis.
 Of the 2K seeds, 43.9% led to Philosophy using an average of 13.4 clicks.
 
 *Distribution of the number of clicks to get to Philosophy*
-![Distribution of the number of clicks to get to Philosophy](image.png)
+![Distribution of the number of clicks to get to Philosophy](analysis\click_distro.png)
 
 According to
 [Wikipedia](https://en.wikipedia.org/wiki/Wikipedia:Getting_to_Philosophy),
@@ -85,7 +85,7 @@ you'll end up back there in 12 clicks.
 This is called a *cycle*.
 
 *The philosophy cycle:*
-![The philosophy cycle](image-1.png)
+![The philosophy cycle](analysis\philosophy_cycle.png)
 
 Once a page leads to any of the pages in the cycle,
 you'll end up getting to philosophy in no more than 11 clicks.
