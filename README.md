@@ -85,21 +85,7 @@ you'll end up back there in 12 clicks.
 This is called a *cycle*.
 
 *The philosophy cycle:*
-```mermaid
-graph TD;
-    Philosophy{Philosophy}-->|Links to|Existence;
-    Existence---Reality;
-    Reality---Universe;
-    Universe---Space;
-    Space---Three-dimensional_space;
-    Three-dimensional_space---Geometry;
-    Mathematics---Geometry;
-    Mathematical_theory---Mathematics;
-    Reason---Mathematical_theory;
-    Consciousness---Reason;
-    Awareness---Consciousness;
-    Philosophy---Awareness;
-```
+![The philosophy cycle](analysis\philosophy_cycle.png)
 
 Once a page leads to any of the pages in the cycle,
 you'll end up getting to philosophy in no more than 11 clicks.
